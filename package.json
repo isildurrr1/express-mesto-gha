@@ -1,0 +1,20 @@
+{
+  "homepage": "http://isildurrr1.github.io/express-mesto-gha",
+  "name": "express-mesto-gha",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "eslint": "^8.43.0",
+    "express": "^4.18.2",
+    "mongoose": "^7.3.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "nodemon": "^2.0.22"
+  }
+}
