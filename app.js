@@ -10,11 +10,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb')
 
-app.use('/users', require('./routes/users'));
-
 app.use((req, res, next) => {
   req.user = {_id: '648ff33c8f6494529d01f8da'};
   next();
 });
+
+app.use('/users', require('./routes/users'));
+
+app.use('/cards', require('./routes/cards'));
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`))
