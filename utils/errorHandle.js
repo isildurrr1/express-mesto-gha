@@ -1,7 +1,7 @@
 module.exports.errorHandle = (err, res) => {
   if (err.name === "ValidationError") {
     res.status(400).send({ message: 'Некорректные данные' })
-  } else if (err.name === 'CastError') {
+  } else if (err.name === 'CastError' || err.message === 'NotFoundId') {
     res.status(404).send({ message: 'Данные не найдены' })
   }
   else {

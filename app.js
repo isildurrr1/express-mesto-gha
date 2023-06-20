@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errorHandle } = require('./utils/errorHandle');
 
 const PORT = 3000;
 const app = express();

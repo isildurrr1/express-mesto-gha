@@ -9,6 +9,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
+    .orFail(() => { throw new Error('NotFoundId')})
     .then((user) => res.send(user))
     .catch((err) => errorHandle(err, res));
 };
@@ -23,12 +24,14 @@ module.exports.createUser = (req, res) => {
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+    .orFail(() => { throw new Error('NotFoundId')})
     .then(user => res.send(user))
     .catch((err) => errorHandle(err, res));
 }
 
 module.exports.updateAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id,  req.body , { new: true, runValidators: true })
+    .orFail(() => { throw new Error('NotFoundId')})
     .then(user => res.send(user))
     .catch((err) => errorHandle(err, res));
 }
