@@ -19,6 +19,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   Card.deleteOne({ _id: req.params.cardId })
+    .orFail(() => { throw new Error('NotFoundId')})
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => errorHandle(err, res));
 }
