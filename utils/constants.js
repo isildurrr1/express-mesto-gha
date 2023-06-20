@@ -7,5 +7,5 @@ module.exports = {
   PORT,
   VALIDATION_ERROR,
   NOT_FOUND_ERROR,
-  DEFAULT_ERROR
+  DEFAULT_ERROR,
 };
