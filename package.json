@@ -2,6 +2,7 @@
   "homepage": "http://isildurrr1.github.io/express-mesto-gha",
   "name": "express-mesto-gha",
   "version": "1.0.0",
+  "author": "Romashev Andrey",
   "scripts": {
     "lint": "npx eslint .",
     "start": "node app.js",
