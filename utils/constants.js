@@ -1,0 +1,11 @@
+const PORT = 3000;
+const VALIDATION_ERROR = 400;
+const NOT_FOUND_ERROR = 404;
+const DEFAULT_ERROR = 500;
+
+module.exports = {
+  PORT,
+  VALIDATION_ERROR,
+  NOT_FOUND_ERROR,
+  DEFAULT_ERROR
+};

@@ -1,6 +1,8 @@
-const VALIDATION_ERROR = 400;
-const NOT_FOUND_ERROR = 404;
-const DEFAULT_ERROR = 500;
+const {
+  VALIDATION_ERROR,
+  NOT_FOUND_ERROR,
+  DEFAULT_ERROR
+} = require('./constants')
 
 module.exports.errorHandle = (err, res) => {
   if (err.name === "ValidationError") {
