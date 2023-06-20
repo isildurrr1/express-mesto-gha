@@ -14,5 +14,3 @@ module.exports.errorHandle = (err, res) => {
     res.status(DEFAULT_ERROR).send({ message: 'Произошла ошибка' })
   }
 }
-
-def
