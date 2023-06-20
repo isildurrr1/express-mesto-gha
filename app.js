@@ -19,4 +19,6 @@ app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
 
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`))
+app.use((req, res) => res.status(500).send({ message: 'Введите корректный путь' }));
+
+app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
