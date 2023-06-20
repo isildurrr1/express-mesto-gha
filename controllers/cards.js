@@ -19,7 +19,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   Card.deleteOne({ _id: req.params.cardId })
-    .orFail(() => { throw new Error('NotFoundId')})
+    .orFail(() => { throw new Error('NotFoundCard')})
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => errorHandle(err, res));
 }
@@ -27,7 +27,7 @@ module.exports.deleteCard = (req, res) => {
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate( req.params.cardId,
     { $addToSet: { likes: req.user._id } },{ new: true })
-    .orFail(() => { throw new Error('NotFoundId')})
+    .orFail(() => { throw new Error('NotFoundCard')})
     .then(card => res.send(card))
     .catch((err) => errorHandle(err, res));
 }
@@ -36,7 +36,7 @@ module.exports.likeCard = (req, res) => {
 module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(req.params.cardId,
     { $pull: { likes: req.user._id } }, { new: true })
-    .orFail(() => { throw new Error('NotFoundId')})
+    .orFail(() => { throw new Error('NotFoundCard')})
     .then(card => res.send(card))
     .catch((err) => errorHandle(err, res));
 }

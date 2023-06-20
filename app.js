@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { errorHandle } = require('./utils/errorHandle');
+const { errorHandle, NOT_FOUND_ERROR } = require('./utils/errorHandle');
 
 const PORT = 3000;
 const app = express();
@@ -20,6 +20,6 @@ app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
 
-app.use((req, res) => res.status(500).send({ message: 'Введите корректный путь' }));
+app.use((req, res) => res.status(NOT_FOUND_ERROR).send({ message: 'Введите корректный путь' }));
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));

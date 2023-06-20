@@ -1,10 +1,18 @@
+const VALIDATION_ERROR = 400;
+const NOT_FOUND_ERROR = 404;
+const DEFAULT_ERROR = 500;
+
 module.exports.errorHandle = (err, res) => {
   if (err.name === "ValidationError") {
-    res.status(400).send({ message: 'Некорректные данные' })
-  } else if (err.name === 'CastError' || err.message === 'NotFoundId') {
-    res.status(404).send({ message: 'Данные не найдены' })
+    res.status(VALIDATION_ERROR).send({ message: 'Некорректные данные' })
+  } else if (err.name === 'CastError' || err.message === 'NotFoundUser') {
+    res.status(NOT_FOUND_ERROR).send({ message: 'Данные не найдены' })
+  } else if (err.message === 'NotFoundCard') {
+    res.status(VALIDATION_ERROR).send({ message: 'Данные не найдены' })
   }
   else {
-    res.status(500).send({ message: 'Произошла ошибка' })
+    res.status(DEFAULT_ERROR).send({ message: 'Произошла ошибка' })
   }
 }
+
+def
