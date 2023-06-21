@@ -21,13 +21,17 @@ module.exports.createUser = (req, res) => {
     .catch((err) => errorHandle(err, res));
 };
 
-const findAndUpdate = (req, res) => {
-  User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
+module.exports.updateProfile = (req, res) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => { throw new Error('NotFound'); })
     .then((user) => res.send(user))
     .catch((err) => errorHandle(err, res));
 };
 
-module.exports.updateProfile = (req, res) => findAndUpdate(req, res);
-
-module.exports.updateAvatar = (req, res) => findAndUpdate(req, res);
+module.exports.updateAvatar = (req, res) => {
+  User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
+    .orFail(() => { throw new Error('NotFound'); })
+    .then((user) => res.send(user))
+    .catch((err) => errorHandle(err, res));
+};
