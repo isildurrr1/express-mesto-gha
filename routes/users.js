@@ -2,17 +2,17 @@ const router = require('express').Router();
 
 const {
   getUsers,
+  getUserMe,
   getUser,
-  createUser,
   updateProfile,
   updateAvatar,
 } = require('../controllers/users');
 
 router.get('/', getUsers); // GET /users — возвращает всех пользователей
 
-router.get('/:userId', getUser); // GET /users/:userId - возвращает пользователя по _id
+router.get('/me', getUserMe);
 
-router.post('/', createUser); // POST /users — создаёт пользователя
+router.get('/:userId', getUser); // GET /users/:userId - возвращает пользователя по _id
 
 router.patch('/me', updateProfile); // PATCH /users/me — обновляет профиль
 

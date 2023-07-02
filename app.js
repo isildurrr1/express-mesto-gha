@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { PORT = 3000, NOT_FOUND_ERROR } = require('./utils/constants');
+const { login, createUser } = require('./controllers/users');
 
 const app = express();
 
@@ -17,6 +18,10 @@ app.use((req, res, next) => {
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
+
+app.post('/signin', login);
+
+app.post('/signup', createUser);
 
 app.use((req, res) => res.status(NOT_FOUND_ERROR).send({ message: 'Введите корректный путь' }));
 
