@@ -1,5 +1,7 @@
 const Card = require('../models/card');
 const { errorHandle } = require('../utils/errorHandle');
+const NotFoundError = require('../errors/NotFoundError');
+const NotRightsError = require('../errors/NotRightsError');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
@@ -15,11 +17,25 @@ module.exports.createCard = (req, res) => {
     .catch((err) => errorHandle(err, res));
 };
 
-module.exports.deleteCard = (req, res) => {
-  Card.deleteOne({ _id: req.params.cardId })
-    .orFail(() => { throw new Error('NotFound'); })
-    .then(() => res.send({ message: 'Пост удалён' }))
-    .catch((err) => errorHandle(err, res));
+module.exports.deleteCard = (req, res, next) => {
+  Card.findById(req.params.cardId)
+    .orFail(() => {
+      throw new NotFoundError('NotFound');
+    })
+    .then((card) => {
+      if (`${card.owner}` !== req.user._id) {
+        throw new NotRightsError('Нет прав');
+      }
+      Card.findByIdAndRemove(req.params.cardId)
+        .orFail(() => {
+          throw new NotFoundError('Не найдено');
+        })
+        .then(() => {
+          res.send({ message: 'Карточка удалена' });
+        })
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
 };
 
 module.exports.likeCard = (req, res) => {

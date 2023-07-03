@@ -10,7 +10,7 @@ const {
 
 router.get('/', getUsers); // GET /users — возвращает всех пользователей
 
-router.get('/me', getUserMe);
+router.get('/me', getUserMe); // GET /users/me - возвращает информацию о текущем пользователе
 
 router.get('/:userId', getUser); // GET /users/:userId - возвращает пользователя по _id
 
