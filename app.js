@@ -20,15 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
+app.post('/signin', loginValid, login);
+
+app.post('/signup', createUserValid, createUser);
+
 app.use(auth);
 
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
-
-app.post('/signin', loginValid, login);
-
-app.post('/signup', createUserValid, createUser);
 
 app.use(errors());
 app.use(handleErrors);

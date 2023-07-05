@@ -7,14 +7,14 @@ const BadReqError = require('../errors/BadReqError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.status(200).send({ data: users }))
     .catch((err) => next(err));
 };
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(() => { throw new Error('NotFound'); })
-    .then((user) => res.send(user))
+    .orFail(() => { throw new NotFoundError('Не найдено'); })
+    .then((user) => res.status(200).send(user))
     .catch((err) => next(err));
 };
 
