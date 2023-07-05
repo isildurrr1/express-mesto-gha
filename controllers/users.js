@@ -24,25 +24,28 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  bcrypt.hash(password, 10).then((hash) => {
-    User.create({
-      name, about, avatar, email, password: hash,
-    })
-      .then((user) => {
-        res.status(200).send({
-          name, about, avatar, email, _id: user._id,
-        });
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name, about, avatar, email, password: hash,
       })
-      .catch((err) => {
-        if (err.code === 11000) {
-          next(new ConflictError('Пользователь существует'));
-        } else if (err.name === 'ValidationError') {
-          next(new IncorrectData('Некорректные данные'));
-        } else {
+        .then((user) => {
+          res.status(200).send({
+            name, about, avatar, email, _id: user._id,
+          });
+        })
+        .catch((err) => {
+          if (err.code === 11000) {
+            next(new ConflictError('Пользователь существует'));
+            return;
+          }
+          if (err.name === 'ValidationError') {
+            next(new IncorrectData('Некорректные данные'));
+            return;
+          }
           next(err);
-        }
-      });
-  });
+        });
+    });
 };
 
 module.exports.updateProfile = (req, res, next) => {
