@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const linkRegEx = /^((http|https|ftp):\/\/)?(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/;
+const linkRegEx = /^((http|https|ftp):\/\/)?(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i;
 
 const createUserValid = celebrate({
   body: Joi.object().keys({
