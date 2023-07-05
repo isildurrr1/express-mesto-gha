@@ -1,6 +1,12 @@
 const router = require('express').Router();
 
 const {
+  updateProfileValid,
+  updateAvatarValid,
+  checkUserIdValid,
+} = require('../middlewares/validation');
+
+const {
   getUsers,
   getUserMe,
   getUser,
@@ -12,10 +18,10 @@ router.get('/', getUsers); // GET /users — возвращает всех по�
 
 router.get('/me', getUserMe); // GET /users/me - возвращает информацию о текущем пользователе
 
-router.get('/:userId', getUser); // GET /users/:userId - возвращает пользователя по _id
+router.get('/:userId', checkUserIdValid, getUser); // GET /users/:userId - возвращает пользователя по _id
 
-router.patch('/me', updateProfile); // PATCH /users/me — обновляет профиль
+router.patch('/me', updateProfileValid, updateProfile); // PATCH /users/me — обновляет профиль
 
-router.patch('/me/avatar', updateAvatar); // PATCH /users/me/avatar — обновляет аватар
+router.patch('/me/avatar', updateAvatarValid, updateAvatar); // PATCH /users/me/avatar — обновляет аватар
 
 module.exports = router;

@@ -1,7 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { PORT = 3000, NOT_FOUND_ERROR } = require('./utils/constants');
+const { PORT = 3000 } = require('./utils/constants');
 const { login, createUser } = require('./controllers/users');
+const { errors } = require('celebrate');
+const handleErrors = require('./middlewares/handleErrors');
+
+const {
+  loginValid,
+  createUserValid,
+} = require('./middlewares/validation');
 
 const app = express();
 
@@ -10,20 +17,16 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
-app.use((req, res, next) => {
-  req.user = { _id: '648ff33c8f6494529d01f8da' };
-  next();
-});
-
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
 
-app.post('/signin', login);
+app.post('/signin', loginValid, login);
 
-app.post('/signup', createUser);
+app.post('/signup', createUserValid, createUser);
 
-app.use((req, res) => res.status(NOT_FOUND_ERROR).send({ message: 'Введите корректный путь' }));
+app.use(errors());
+app.use(handleErrors);
 
 // eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));

@@ -1,20 +1,19 @@
 const Card = require('../models/card');
-const { errorHandle } = require('../utils/errorHandle');
 const NotFoundError = require('../errors/NotFoundError');
 const NotRightsError = require('../errors/NotRightsError');
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => errorHandle(err, res));
+    .catch((err) => next(err));
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
-    .catch((err) => errorHandle(err, res));
+    .catch((err) => next(err));
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -38,16 +37,16 @@ module.exports.deleteCard = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
-    .orFail(() => { throw new Error('NotFound'); })
+    .orFail(() => { throw new NotFoundError('Не найдено'); })
     .then((card) => res.send(card))
-    .catch((err) => errorHandle(err, res));
+    .catch((err) => next(err));
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
-    .orFail(() => { throw new Error('NotFound'); })
+    .orFail(() => { throw new NotFoundError('Не найдено'); })
     .then((card) => res.send(card))
-    .catch((err) => errorHandle(err, res));
+    .catch((err) => next(err));
 };
