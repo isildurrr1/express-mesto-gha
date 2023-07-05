@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const linkRegEx = /(https?:\/\/)(w{3}\.)?\w+[-.~:/?#[\]@!$&'()*+,;=]*#?/;
+const linkRegEx = /^((http|https|ftp):\/\/)?(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/;
 
 const createUserValid = celebrate({
   body: Joi.object().keys({
@@ -34,7 +34,7 @@ const updateAvatarValid = celebrate({
 
 const checkUserIdValid = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required().length(24),
+    userId: Joi.string().length(24).hex().required(),
   }),
 });
 
@@ -47,7 +47,7 @@ const createCardValid = celebrate({
 
 const checkCardIdValid = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().length(24),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 });
 

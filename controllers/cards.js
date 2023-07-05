@@ -1,10 +1,11 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/NotFoundError');
 const NotRightsError = require('../errors/NotRightsError');
+const IncorrectData = require('../errors/IncorrectData');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(200).send({ data: cards }))
+    .then((cards) => res.send({ data: cards }))
     .catch((err) => next(err));
 };
 
@@ -12,8 +13,14 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.status(200).send({ data: card }))
-    .catch((err) => next(err));
+    .then((card) => res.send({ data: card }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new IncorrectData('Некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -30,9 +37,15 @@ module.exports.deleteCard = (req, res, next) => {
           throw new NotFoundError('Не найдено');
         })
         .then(() => {
-          res.status(200).send({ message: 'Карточка удалена' });
+          res.send({ message: 'Карточка удалена' });
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            next(new IncorrectData('Некорректные данные'));
+          } else {
+            next(err);
+          }
+        });
     })
     .catch((err) => next(err));
 };
@@ -40,13 +53,25 @@ module.exports.deleteCard = (req, res, next) => {
 module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .orFail(() => { throw new NotFoundError('Не найдено'); })
-    .then((card) => res.status(200).send(card))
-    .catch((err) => next(err));
+    .then((card) => res.send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new IncorrectData('Некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .orFail(() => { throw new NotFoundError('Не найдено'); })
-    .then((card) => res.status(200).send(card))
-    .catch((err) => next(err));
+    .then((card) => res.send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new IncorrectData('Некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
