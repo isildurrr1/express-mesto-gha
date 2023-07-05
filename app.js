@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+
 const { PORT = 3000 } = require('./utils/constants');
 const { login, createUser } = require('./controllers/users');
-const { errors } = require('celebrate');
 const handleErrors = require('./middlewares/handleErrors');
 
 const {
