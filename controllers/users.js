@@ -28,19 +28,21 @@ module.exports.createUser = (req, res, next) => {
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
-    }))
-    .then((user) => res.status(201).send({
-      name, about, avatar, email, _id: user._id,
-    }))
-    .catch((err) => {
-      if (err.code === 11000) {
-        throw new ConflictError('Пользователь существует');
-      } else if (err instanceof mongooseError.ValidationError) {
-        throw new IncorrectData('Некорректные данные');
-      } else {
+    })
+      .then((user) => res.status(201).send({
+        name, about, avatar, email, _id: user._id,
+      }))
+      .catch((err) => {
+        if (err.code === 11000) {
+          next(new ConflictError('Пользователь существует'));
+          return;
+        }
+        if (err instanceof mongooseError.ValidationError) {
+          next(new IncorrectData('Некорректные данные'));
+          return;
+        }
         next(err);
-      }
-    });
+      }));
 };
 
 module.exports.updateProfile = (req, res, next) => {
