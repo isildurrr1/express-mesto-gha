@@ -11,12 +11,16 @@ const {
   createUserValid,
 } = require('./middlewares/validation');
 
+const auth = require('./middlewares/auth');
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+
+app.use(auth);
 
 app.use('/users', require('./routes/users'));
 

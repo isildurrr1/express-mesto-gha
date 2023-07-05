@@ -26,7 +26,7 @@ module.exports.createUser = (req, res, next) => {
     User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => res.send({ data: user }))
+      .then((user) => res.status(200).send({ data: user }))
       .catch((err) => next(err));
   });
 };
@@ -35,14 +35,14 @@ module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => { throw new NotFoundError('Не найдено'); })
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => next(err));
 };
 
 module.exports.updateAvatar = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(() => { throw new NotFoundError('Не найдено'); })
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => next(err));
 };
 
@@ -63,7 +63,7 @@ module.exports.login = (req, res, next) => {
           const token = jwt.sign({ _id: user._id }, 'my-jwt-token', {
             expiresIn: '7d',
           });
-          res.send({ token });
+          res.status(200).send({ token });
         })
         .catch((err) => next(err));
     })
@@ -76,7 +76,7 @@ module.exports.getUserMe = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Не найдено');
       }
-      res.send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
