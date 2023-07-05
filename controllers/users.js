@@ -1,3 +1,4 @@
+const mongooseError = require('mongoose').Error;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -34,7 +35,7 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         throw new ConflictError('Пользователь существует');
-      } else if (err.name === 'ValidationError') {
+      } else if (err instanceof mongooseError.ValidationError) {
         throw new IncorrectData('Некорректные данные');
       } else {
         next(err);
