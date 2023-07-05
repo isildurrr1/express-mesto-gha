@@ -4,6 +4,7 @@ const User = require('../models/user');
 const AuthError = require('../errors/AuthError');
 const NotFoundError = require('../errors/NotFoundError');
 const BadReqError = require('../errors/BadReqError');
+const ConflictError = require('../errors/ConflictError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -31,7 +32,13 @@ module.exports.createUser = (req, res, next) => {
           name, about, avatar, email, _id: user._id,
         });
       })
-      .catch((err) => next(err));
+      .catch((err) => {
+        if (err.code === 11000) {
+          next(new ConflictError('Пользователь существует'));
+        } else {
+          next(err);
+        }
+      });
   });
 };
 
