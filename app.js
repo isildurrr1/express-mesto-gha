@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const { PORT = 3000 } = require('./utils/constants');
 const { login, createUser } = require('./controllers/users');
 const handleErrors = require('./middlewares/handleErrors');
+const NotFoundError = require('./errors/NotFoundError');
 
 const {
   loginValid,
@@ -29,6 +30,10 @@ app.use(auth);
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
+
+app.use((req, res, next) => {
+  next(new NotFoundError('Некорректно указан путь'));
+});
 
 app.use(errors());
 app.use(handleErrors);
