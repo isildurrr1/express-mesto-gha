@@ -33,9 +33,9 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь существует'));
+        throw new ConflictError('Пользователь существует');
       } else if (err.name === 'ValidationError') {
-        next(new IncorrectData('Некорректные данные'));
+        throw new IncorrectData('Некорректные данные');
       } else {
         next(err);
       }
